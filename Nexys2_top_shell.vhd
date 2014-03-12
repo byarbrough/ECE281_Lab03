@@ -1,6 +1,7 @@
 ----------------------------------------------------------------------------------
 -- Company: USAFA
--- Engineer: Silva
+-- Engineer: Silva created Shell
+-- 			Yarbrough completed project
 -- 
 -- Create Date:    12:43:25 07/07/2012 
 -- Module Name:    Nexys2_Lab3top - Behavioral 
@@ -17,7 +18,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 -- arithmetic functions with Signed or Unsigned values
 --use IEEE.NUMERIC_STD.ALL;
 
--- Uncomment the following library declaration if instantiating
+-- Uncomment the following library declaration if instantiating	
 -- any Xilinx primitives in this code.
 --library UNISIM;
 --use UNISIM.VComponents.all;
