@@ -4,7 +4,7 @@
 -- 			Yarbrough completed project
 -- 
 -- Create Date:    12:43:25 07/07/2012 
--- Module Name:    Nexys2_Lab3top - Behavioral 
+-- Module Name:    Nexys2_Lab3top - Structural 
 -- Target Devices: Nexys2 Project Board
 -- Tool versions: 
 -- Description: This file is a shell for implementing designs on a NEXYS 2 board
@@ -16,7 +16,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating	
 -- any Xilinx primitives in this code.
@@ -92,8 +92,21 @@ signal ClockBus_sig : STD_LOGIC_VECTOR (26 downto 0);
 --------------------------------------------------------------------------------------
 --Insert your design's component declaration below	
 --------------------------------------------------------------------------------------
-
-
+	
+-------------------------------------------------------------------------------------
+-- Add MooreElevatorController Component for CE3
+-- Input: clk, reset, stop, up_down
+-- Output: floor
+-------------------------------------------------------------------------------------
+	COMPONENT MooreElevatorController
+	PORT(
+    clk : in  STD_LOGIC;
+    reset : in  STD_LOGIC;
+	 stop : in  STD_LOGIC;
+	 up_down : in  STD_LOGIC;
+	 floor : out  STD_LOGIC_VECTOR (3 downto 0)
+    );
+	END COMPONENT;
 
 --------------------------------------------------------------------------------------
 --Insert any required signal declarations below
@@ -126,10 +139,10 @@ LED <= CLOCKBUS_SIG(26 DOWNTO 19);
 --		  Example: if you are not using 7-seg display #3 set nibble3 to "0000"
 --------------------------------------------------------------------------------------
 
-nibble0 <= 
-nibble1 <= 
-nibble2 <= 
-nibble3 <= 
+nibble0 <= UNSIGNED(floor) mod 10;
+nibble1 <= UNSIGNED(floor)/10;
+nibble2 <= "0000";
+nibble3 <= "0000";
 
 --This code converts a nibble to a value that can be displayed on 7-segment display #0
 	sseg0: nibble_to_sseg PORT MAP(
@@ -172,6 +185,12 @@ nibble3 <=
 -----------------------------------------------------------------------------
 --Instantiate the design you with to implement below and start wiring it up!:
 -----------------------------------------------------------------------------
+
+	--wire elevator control clock to 1.5Hz signal
+	clk <= ClockBus_sig(25);
+	
+	--assign reset
+	reset <= btn(3);
 
 
 end Behavioral;
