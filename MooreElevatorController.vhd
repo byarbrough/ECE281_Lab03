@@ -3,10 +3,9 @@
 -- Engineer: Silva & Yarbrough
 -- 
 -- Create Date:    	10:33:47 07/07/2012 
--- Design Name:		CE3 - now applied to Lab 3
+-- Design Name:		CE3
 -- Module Name:    	MooreElevatorController - Behavioral 
--- Description: 		This is a Moore controller for the elevator.
---							It uses two inputs to determine if the elevator is stopped, or moving up or down
+-- Description: 		Shell for completing CE3
 --
 ----------------------------------------------------------------------------------
 library IEEE;

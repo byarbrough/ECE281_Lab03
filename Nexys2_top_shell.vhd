@@ -111,7 +111,7 @@ signal ClockBus_sig : STD_LOGIC_VECTOR (26 downto 0);
 --------------------------------------------------------------------------------------
 --Insert any required signal declarations below
 --------------------------------------------------------------------------------------
-
+signal floor_sig1 : std_logic_vector(3 downto 0);
 
 
 begin
@@ -139,8 +139,8 @@ LED <= CLOCKBUS_SIG(26 DOWNTO 19);
 --		  Example: if you are not using 7-seg display #3 set nibble3 to "0000"
 --------------------------------------------------------------------------------------
 
-nibble0 <= UNSIGNED(floor) mod 10;
-nibble1 <= UNSIGNED(floor)/10;
+nibble0 <= floor_sig1;
+nibble1 <= "0000";
 nibble2 <= "0000";
 nibble3 <= "0000";
 
@@ -186,12 +186,14 @@ nibble3 <= "0000";
 --Instantiate the design you with to implement below and start wiring it up!:
 -----------------------------------------------------------------------------
 
-	--wire elevator control clock to 1.5Hz signal
-	clk <= ClockBus_sig(25);
-	
-	--assign reset
-	reset <= btn(3);
-
+	 MooreC: MooreElevatorController
+	 PORT MAP(
+		 clk <= ClockBus_sig(25);
+		 reset <= btn(3);
+		 stop <= switch(1); 
+		 up_down <= switch(2); 
+		 floor <= floor_sig1
+    );
 
 end Behavioral;
 
