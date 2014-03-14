@@ -141,7 +141,7 @@ LED <= CLOCKBUS_SIG(26 DOWNTO 19);
 --------------------------------------------------------------------------------------
 
 nibble0 <= floor_sig0;
-nibble1 <= "0000";
+nibble1 <= "0101";
 nibble2 <= "0000";
 nibble3 <= "0000";
 
@@ -187,7 +187,8 @@ nibble3 <= "0000";
 --Instantiate the design you with to implement below and start wiring it up!:
 -----------------------------------------------------------------------------
 
-	 MooreC: MooreElevatorController
+	--this instantiation accounts for the floors moving in the one's place of the first elevator
+	 Main0: MooreElevatorController
 	 PORT MAP(
 		 clk => ClockBus_sig(25),
 		 reset => btn(3),
@@ -195,6 +196,8 @@ nibble3 <= "0000";
 		 up_down => switch(1), 
 		 floor => floor_sig0
     );
+	 
+	 
 
 end Behavioral;
 

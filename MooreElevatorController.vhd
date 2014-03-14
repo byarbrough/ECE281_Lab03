@@ -56,53 +56,55 @@ begin
 		--now we will code our next-state logic
 		else
 			case floor_state is
-				--when our current state is floor1
-				when floor1 =>
-					--if up_down is set to "go up" and stop is set to 
-					--"don't stop" which floor do we want to go to?
-					if (up_down='1' and stop='0') then 
-						--floor2 right?? This makes sense!
-						floor_state <= floor2;
-					--otherwise we're going to stay at floor1
-					else
-						floor_state <= floor1;
-					end if;
-				--when our current state is floor2
-				when floor2 => 
-					--if up_down is set to "go up" and stop is set to 
-					--"don't stop" which floor do we want to go to?
-					if (up_down='1' and stop='0') then 
-						floor_state <= floor3; 			
-					--if up_down is set to "go down" and stop is set to 
-					--"don't stop" which floor do we want to go to?
-					elsif (up_down='0' and stop='0') then 
-						floor_state <= floor1;
-					--otherwise we're going to stay at floor2
-					else
-						floor_state <= floor2;
-					end if;
-				
---COMPLETE THE NEXT STATE LOGIC ASSIGNMENTS FOR FLOORS 3 AND 4
-				when floor3 =>
-					-- go up and don't stop
-					if (up_down='1' and stop='0') then 
-						floor_state <= floor4;
-						--go down and don't stop
-					elsif (up_down='0' and stop='0') then 
-						floor_state <= floor2;	
-					else
-					--stay
-						floor_state <= floor3;	
-					end if;
-				when floor4 =>
-					--can only go down
-					if (up_down='0' and stop='0') then 
-						floor_state <= floor3;
-					else 
-						--stay
-						floor_state <= floor4;	
-					end if;
-				
+				if (up_down='1') and (stop='0') then
+					
+--				--when our current state is floor1
+--				when floor1 =>
+--					--if up_down is set to "go up" and stop is set to 
+--					--"don't stop" which floor do we want to go to?
+--					if (up_down='1' and stop='0') then 
+--						--floor2 right?? This makes sense!
+--						floor_state <= floor2;
+--					--otherwise we're going to stay at floor1
+--					else
+--						floor_state <= floor1;
+--					end if;
+--				--when our current state is floor2
+--				when floor2 => 
+--					--if up_down is set to "go up" and stop is set to 
+--					--"don't stop" which floor do we want to go to?
+--					if (up_down='1' and stop='0') then 
+--						floor_state <= floor3; 			
+--					--if up_down is set to "go down" and stop is set to 
+--					--"don't stop" which floor do we want to go to?
+--					elsif (up_down='0' and stop='0') then 
+--						floor_state <= floor1;
+--					--otherwise we're going to stay at floor2
+--					else
+--						floor_state <= floor2;
+--					end if;
+--				
+----COMPLETE THE NEXT STATE LOGIC ASSIGNMENTS FOR FLOORS 3 AND 4
+--				when floor3 =>
+--					-- go up and don't stop
+--					if (up_down='1' and stop='0') then 
+--						floor_state <= floor4;
+--						--go down and don't stop
+--					elsif (up_down='0' and stop='0') then 
+--						floor_state <= floor2;	
+--					else
+--					--stay
+--						floor_state <= floor3;	
+--					end if;
+--				when floor4 =>
+--					--can only go down
+--					if (up_down='0' and stop='0') then 
+--						floor_state <= floor3;
+--					else 
+--						--stay
+--						floor_state <= floor4;	
+--					end if;
+--				
 				--This line accounts for phantom states
 				when others =>
 					floor_state <= floor1;
