@@ -13,7 +13,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx primitives in this code.
@@ -23,8 +23,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity MooreFloorFinder is
     Port ( clk : in  STD_LOGIC;
            reset : in  STD_LOGIC;
-           stop : in  STD_LOGIC;
            toFloor : in  STD_LOGIC_VECTOR (3 downto 0);
+			  curFloor : in STD_LOGIC_VECTOR ( 3 downto 0);
 			  onFloor : out  STD_LOGIC_VECTOR (3 downto 0));
 end MooreFloorFinder;
 
@@ -55,9 +55,7 @@ begin
 		if reset='1' then
 		--changed to from floor1 to floor2 for prime number problem
 			floor_state <= floor0;
---------------------- code below is for specific functionalities ----------------
-
-		elsif (stop='0') then--moving up
+		elsif (toFloor > curFloor) then--moving up towards floor
 			case floor_state is
 				when floor0 =>
 					floor_state <= floor1;
@@ -78,7 +76,7 @@ begin
 				when others =>
 					floor_state <= floor0;
 			end case;
-		elsif (stop='1') then--moving down
+		elsif (toFloor < curFloor) then--moving down to floor
 			case floor_state is
 				when floor0 =>
 					floor_state <= floor0;
@@ -99,7 +97,7 @@ begin
 				when others =>
 					floor_state <= floor0;
 				end case;
-			end if;
+			end if; --the elevator is already on the correct floor
 		end if;
 	end process;
 

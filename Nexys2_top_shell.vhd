@@ -112,9 +112,12 @@ signal ClockBus_sig : STD_LOGIC_VECTOR (26 downto 0);
 --------------------------------------------------------------------------------------
 --Insert any required signal declarations below
 --------------------------------------------------------------------------------------
+
 signal floor_sig0 : std_logic_vector(3 downto 0);
 signal floor_sig1 : std_logic_vector(3 downto 0);
 
+--used for floorfinder only
+signal swRead : std_logic_vector(3 downto 0);
 
 begin
 
@@ -140,6 +143,7 @@ LED <= CLOCKBUS_SIG(26 DOWNTO 19);
 --Note: You must set each "nibble" signal to a value. 
 --		  Example: if you are not using 7-seg display #3 set nibble3 to "0000"
 --------------------------------------------------------------------------------------
+
 
 nibble0 <= floor_sig0;
 nibble1 <= floor_sig1;
@@ -188,23 +192,28 @@ nibble3 <= "0000";
 --Instantiate the design you with to implement below and start wiring it up!:
 -----------------------------------------------------------------------------
 
------------------ deals with prime number controller
-	 MooreC: MooreElevatorController
-	 PORT MAP(
-		 clk => ClockBus_sig(25),
-		 reset => btn(3),
-		 stop => switch(0), 
-		 up_down => switch(1), 
-		 floor1s => floor_sig0,
-		 floor10s => floor_sig1
-    );
+----------------- instantiates prime number controller
+-- MoorePrime: MooreElevatorController
+--	 PORT MAP(
+--		 clk => ClockBus_sig(25),
+--		 reset => btn(3),
+--		 stop => switch(0), 
+--		 up_down => switch(1), 
+--		 floor1s => floor_sig0,
+--		 floor10s => floor_sig1
+--	 );
 -----------------------------------------------------
 
------------------------- dels with floor finder ------------
+------------------------ instantiates floor finder ------------
 
-
-	 
-	 
+Finder: MooreFloorFinder
+	PORT MAP(
+		clk => ClockBus_sig(25),
+		reset => btn(3),
+		toFloor => swRead, 
+		curFloor => "0000", 
+		onFloor => floor_sig0
+	  );	 
 
 end Behavioral;
 
