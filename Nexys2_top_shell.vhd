@@ -104,15 +104,16 @@ signal ClockBus_sig : STD_LOGIC_VECTOR (26 downto 0);
     reset : IN  STD_LOGIC;
 	 stop : IN  STD_LOGIC;
 	 up_down : IN  STD_LOGIC;
-	 floor : OUT  STD_LOGIC_VECTOR (3 downto 0)
+	 floor1s : OUT  STD_LOGIC_VECTOR (3 downto 0);
+	 floor10s : out  STD_LOGIC_VECTOR (3 downto 0)
     );
 	END COMPONENT;
 
 --------------------------------------------------------------------------------------
 --Insert any required signal declarations below
 --------------------------------------------------------------------------------------
---output of first instantiation, connects to nibble0
 signal floor_sig0 : std_logic_vector(3 downto 0);
+signal floor_sig1 : std_logic_vector(3 downto 0);
 
 
 begin
@@ -141,7 +142,7 @@ LED <= CLOCKBUS_SIG(26 DOWNTO 19);
 --------------------------------------------------------------------------------------
 
 nibble0 <= floor_sig0;
-nibble1 <= "0101";
+nibble1 <= floor_sig1;
 nibble2 <= "0000";
 nibble3 <= "0000";
 
@@ -187,14 +188,15 @@ nibble3 <= "0000";
 --Instantiate the design you with to implement below and start wiring it up!:
 -----------------------------------------------------------------------------
 
-	--this instantiation accounts for the floors moving in the one's place of the first elevator
-	 Main0: MooreElevatorController
+--	--this instantiation accounts for the floors moving in the one's place of the first elevator
+	 MooreC: MooreElevatorController
 	 PORT MAP(
 		 clk => ClockBus_sig(25),
 		 reset => btn(3),
 		 stop => switch(0), 
 		 up_down => switch(1), 
-		 floor => floor_sig0
+		 floor1s => floor_sig0,
+		 floor10s => floor_sig1
     );
 	 
 	 

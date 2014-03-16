@@ -25,7 +25,8 @@ entity MooreElevatorController is
            reset : in  STD_LOGIC;
            stop : in  STD_LOGIC;
            up_down : in  STD_LOGIC;
-           floor : out  STD_LOGIC_VECTOR (3 downto 0));
+           floor1s : out  STD_LOGIC_VECTOR (3 downto 0);
+			  floor10s : out  STD_LOGIC_VECTOR (3 downto 0));
 end MooreElevatorController;
 
 architecture Behavioral of MooreElevatorController is
@@ -33,7 +34,7 @@ architecture Behavioral of MooreElevatorController is
 --Below you create a new variable type! You also define what values that 
 --variable type can take on. Now you can assign a signal as 
 --"floor_state_type" the same way you'd assign a signal as std_logic 
-type floor_state_type is (floor1, floor2, floor3, floor4);
+type floor_state_type is (floor1, floor2, floor3, floor4, floor5, floor7, floor11, floor13, floor17, floor19);
 
 --Here you create a variable "floor_state" that can take on the values
 --defined above. Neat-o!
@@ -52,12 +53,59 @@ begin
 		--reset is active high and will return the elevator to floor1
 		--Question: is reset synchronous or asynchronous?
 		if reset='1' then
-			floor_state <= floor1;
-		--now we will code our next-state logic
-		else
+		--changed to from floor1 to floor2 for prime number problem
+			floor_state <= floor2;
+		elsif (stop='0' and up_down='1') then--moving up
 			case floor_state is
-				if (up_down='1') and (stop='0') then
-					
+				when floor2 =>
+					floor_state <= floor3;
+				when floor3 =>
+					floor_state <= floor5;
+				when floor5 =>
+					floor_state <= floor7;
+				when floor7 =>
+					floor_state <= floor11;
+				when floor11 =>
+					floor_state <= floor13;
+				when floor13 =>
+					floor_state <= floor17;
+				when floor17 =>
+					floor_state <= floor19;
+				when floor19 =>
+					floor_state <= floor19;
+				when others =>
+					floor_state <= floor2;
+			end case;
+		elsif (stop='0' and up_down='0') then--moving down
+			case floor_state is
+				when floor2 =>
+					floor_state <= floor2;
+				when floor3 =>
+					floor_state <= floor2;
+				when floor5 =>
+					floor_state <= floor3;
+				when floor7 =>
+					floor_state <= floor5;
+				when floor11 =>
+					floor_state <= floor7;
+				when floor13 =>
+					floor_state <= floor11;
+				when floor17 =>
+					floor_state <= floor13;
+				when floor19 =>
+					floor_state <= floor17;
+				when others =>
+					floor_state <= floor2;
+				end case;
+			end if;
+		end if;
+	end process;
+-------------------------------------------------------------------------
+--This code is for original Mooore controller
+-------------------------------------------------------------------------
+--		--now we will code our next-state logic
+--		else
+--			case floor_state is
 --				--when our current state is floor1
 --				when floor1 =>
 --					--if up_down is set to "go up" and stop is set to 
@@ -104,21 +152,31 @@ begin
 --						--stay
 --						floor_state <= floor4;	
 --					end if;
---				
-				--This line accounts for phantom states
-				when others =>
-					floor_state <= floor1;
-			end case;
-		end if;
-	end if;
-end process;
+--				--This line accounts for phantom states
+--				when others =>
+--					floor_state <= floor1;
+--			end case;
+--		end if;
+--	end if;
+--end process;
+---------------------------------------------------------------
 
 -- Here you define your output logic. Finish the statements below
-floor <= "0001" when ( floor_state = floor1 ) else
+floor1s <= "0001" when ( floor_state = floor1 ) else
 			"0010" when ( floor_state = floor2 ) else
 			"0011" when ( floor_state = floor3 ) else
 			"0100" when ( floor_state = floor4 ) else
+			"0101" when ( floor_state = floor5 ) else
+			"0111" when ( floor_state = floor7 ) else
+			"0001" when ( floor_state = floor11 ) else
+			"0011" when ( floor_state = floor13 ) else
+			"0111" when ( floor_state = floor17 ) else
+			"1001" when ( floor_state = floor19 ) else
 			"0001";
+
+floor10s <= "0001" when (floor_state = floor11) or (floor_state = floor13)
+							or (floor_state = floor17) or (floor_state = floor19) else
+				"0000";
 
 end Behavioral;
 
