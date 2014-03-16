@@ -34,7 +34,8 @@ architecture Behavioral of MooreElevatorController is
 --Below you create a new variable type! You also define what values that 
 --variable type can take on. Now you can assign a signal as 
 --"floor_state_type" the same way you'd assign a signal as std_logic 
-type floor_state_type is (floor1, floor2, floor3, floor4, floor5, floor7, floor11, floor13, floor17, floor19);
+type floor_state_type is 
+	( floor0, floor1, floor2, floor3, floor4, floor5, floor6, floor7, floor11, floor13, floor17, floor19);
 
 --Here you create a variable "floor_state" that can take on the values
 --defined above. Neat-o!
@@ -55,6 +56,11 @@ begin
 		if reset='1' then
 		--changed to from floor1 to floor2 for prime number problem
 			floor_state <= floor2;
+--------------------- code below is for specific functionalities ----------------
+
+---------------------------------------------------------------------------------
+-- Prime number controller --
+----------------------------------------------------------------------------------
 		elsif (stop='0' and up_down='1') then--moving up
 			case floor_state is
 				when floor2 =>
@@ -100,6 +106,8 @@ begin
 			end if;
 		end if;
 	end process;
+---------------- end prime number controller ----------------------------
+
 -------------------------------------------------------------------------
 --This code is for original Mooore controller
 -------------------------------------------------------------------------
@@ -159,21 +167,25 @@ begin
 --		end if;
 --	end if;
 --end process;
----------------------------------------------------------------
+----------- end original Moore Controller ------------------------
 
 -- Here you define your output logic. Finish the statements below
-floor1s <= "0001" when ( floor_state = floor1 ) else
+--takes care of the 1s place for the elevator
+floor1s <= "0000" when ( floor_state = floor0 ) else
+			"0001" when ( floor_state = floor1 ) else
 			"0010" when ( floor_state = floor2 ) else
 			"0011" when ( floor_state = floor3 ) else
 			"0100" when ( floor_state = floor4 ) else
 			"0101" when ( floor_state = floor5 ) else
+			"0110" when ( floor_state = floor6 ) else
 			"0111" when ( floor_state = floor7 ) else
 			"0001" when ( floor_state = floor11 ) else
 			"0011" when ( floor_state = floor13 ) else
 			"0111" when ( floor_state = floor17 ) else
 			"1001" when ( floor_state = floor19 ) else
-			"0001";
+			"0000";
 
+-- this signal takes care of the ten's place for the elevator
 floor10s <= "0001" when (floor_state = floor11) or (floor_state = floor13)
 							or (floor_state = floor17) or (floor_state = floor19) else
 				"0000";
