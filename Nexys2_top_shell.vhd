@@ -188,7 +188,7 @@ nibble3 <= "0000";
 --Instantiate the design you with to implement below and start wiring it up!:
 -----------------------------------------------------------------------------
 
---	--this instantiation accounts for the floors moving in the one's place of the first elevator
+----------------- deals with prime number controller
 	 MooreC: MooreElevatorController
 	 PORT MAP(
 		 clk => ClockBus_sig(25),
@@ -198,6 +198,11 @@ nibble3 <= "0000";
 		 floor1s => floor_sig0,
 		 floor10s => floor_sig1
     );
+-----------------------------------------------------
+
+------------------------ dels with floor finder ------------
+
+
 	 
 	 
 
