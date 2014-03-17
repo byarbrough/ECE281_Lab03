@@ -127,7 +127,8 @@ signal floor_sig0 : std_logic_vector(3 downto 0);
 signal floor_sig1 : std_logic_vector(3 downto 0);
 
 --used for floorfinder only
-signal swRead : std_logic_vector(3 downto 0);
+signal swRead0 : std_logic_vector(3 downto 0);
+signal swRead1 : std_logic_vector(3 downto 0);
 
 begin
 
@@ -216,20 +217,42 @@ nibble3 <= "0000";
 
 ---------------------- instantiates floor finder ------------
 
-
-Selectornator: FloorSelect
+-- first 7 floor elevator
+Selectornator0: FloorSelect
+	PORT MAP(
+		clk => ClockBus_sig(25),
+		reset => btn(2),
+		toFloor => swRead0, 
+		curFloor => floor_sig0, 
+		onFloor => floor_sig0
+	  );
+	 
+--second 7 floor	 
+Selectornator1: FloorSelect
 	PORT MAP(
 		clk => ClockBus_sig(25),
 		reset => btn(3),
-		toFloor => swRead, 
-		curFloor => floor_sig0, 
-		onFloor => floor_sig0
-	  );	 
+		toFloor => swRead1, 
+		curFloor => floor_sig1, 
+		onFloor => floor_sig1
+	  );	  
 
-swRead(3) <= '0';
-swRead(2) <= switch(2);
-swRead(1) <= switch(1);
-swRead(0) <= switch(0);
-
+--set switches to the signal
+switch_setter: process(
+	switch(0), switch(1), switch(2), switch(3), btn(0), btn(1), btn(2), btn(3))
+begin
+	--check which floor to activate
+	if (btn(0) = '1') then --move the elevator0
+		swRead0(3) <= '0';
+		swRead0(2) <= switch(2);
+		swRead0(1) <= switch(1);
+		swRead0(0) <= switch(0);
+	else --move elevator1
+		swRead1(3) <= '0';
+		swRead1(2) <= switch(2);
+		swRead1(1) <= switch(1);
+		swRead1(0) <= switch(0);
+	end if;
+end process;
 end Behavioral;
 
