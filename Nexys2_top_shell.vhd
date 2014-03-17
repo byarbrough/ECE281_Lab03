@@ -222,7 +222,7 @@ Selectornator: FloorSelect
 		clk => ClockBus_sig(25),
 		reset => btn(3),
 		toFloor => swRead, 
-		curFloor => "0000", 
+		curFloor => floor_sig0, 
 		onFloor => floor_sig0
 	  );	 
 
