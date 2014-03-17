@@ -108,6 +108,16 @@ signal ClockBus_sig : STD_LOGIC_VECTOR (26 downto 0);
 	 floor10s : out  STD_LOGIC_VECTOR (3 downto 0)
     );
 	END COMPONENT;
+	
+	COMPONENT FloorSelect
+	PORT(
+		clk : in  STD_LOGIC;
+      reset : in  STD_LOGIC;
+      toFloor : in  STD_LOGIC_VECTOR (3 downto 0);
+	  curFloor : in  STD_LOGIC_VECTOR (3 downto 0);
+	  onFloor : out  STD_LOGIC_VECTOR (3 downto 0)
+	);
+	END COMPONENT;
 
 --------------------------------------------------------------------------------------
 --Insert any required signal declarations below
@@ -204,16 +214,17 @@ nibble3 <= "0000";
 --	 );
 -----------------------------------------------------
 
------------------------- instantiates floor finder ------------
+---------------------- instantiates floor finder ------------
 
---Finder: MooreFloorFinder
---	PORT MAP(
---		clk => ClockBus_sig(25),
---		reset => btn(3),
---		toFloor => swRead, 
---		curFloor => "0000", 
---		onFloor => floor_sig0
---	  );	 
+
+Selectornator: FloorSelect
+	PORT MAP(
+		clk => ClockBus_sig(25),
+		reset => btn(3),
+		toFloor => swRead, 
+		curFloor => "0000", 
+		onFloor => floor_sig0
+	  );	 
 
 swRead(3) <= '0';
 swRead(2) <= switch(2);
