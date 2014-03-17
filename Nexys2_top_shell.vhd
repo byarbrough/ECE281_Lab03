@@ -206,14 +206,19 @@ nibble3 <= "0000";
 
 ------------------------ instantiates floor finder ------------
 
-Finder: MooreFloorFinder
-	PORT MAP(
-		clk => ClockBus_sig(25),
-		reset => btn(3),
-		toFloor => swRead, 
-		curFloor => "0000", 
-		onFloor => floor_sig0
-	  );	 
+--Finder: MooreFloorFinder
+--	PORT MAP(
+--		clk => ClockBus_sig(25),
+--		reset => btn(3),
+--		toFloor => swRead, 
+--		curFloor => "0000", 
+--		onFloor => floor_sig0
+--	  );	 
+
+swRead(3) <= '0';
+swRead(2) <= switch(2);
+swRead(1) <= switch(1);
+swRead(0) <= switch(0);
 
 end Behavioral;
 
