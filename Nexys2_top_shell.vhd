@@ -130,6 +130,9 @@ signal floor_sig1 : std_logic_vector(3 downto 0);
 signal swRead0 : std_logic_vector(3 downto 0);
 signal swRead1 : std_logic_vector(3 downto 0);
 
+--call the elevator to a specific floor
+signal callElevator : std_logic_vector(3 downto 0);
+
 begin
 
 ----------------------------
@@ -159,7 +162,7 @@ LED <= CLOCKBUS_SIG(26 DOWNTO 19);
 nibble0 <= floor_sig0;
 nibble1 <= floor_sig1;
 nibble2 <= "0000";
-nibble3 <= "0000";
+nibble3 <= callElevator;
 
 --This code converts a nibble to a value that can be displayed on 7-segment display #0
 	sseg0: nibble_to_sseg PORT MAP(
@@ -238,21 +241,48 @@ Selectornator1: FloorSelect
 	  );	  
 
 --set switches to the signal
-switch_setter: process(
-	switch(0), switch(1), switch(2), switch(3), btn(0), btn(1), btn(2), btn(3))
+switch_setter: process(ClockBus_sig(25))
+	--switch(0), switch(1), switch(2), switch(3), btn(0), btn(1), btn(2), btn(3))
 begin
 	--check which floor to activate
-	if (btn(0) = '1') then --move the elevator0
-		swRead0(3) <= '0';
-		swRead0(2) <= switch(2);
-		swRead0(1) <= switch(1);
-		swRead0(0) <= switch(0);
-	else --move elevator1
-		swRead1(3) <= '0';
-		swRead1(2) <= switch(2);
-		swRead1(1) <= switch(1);
-		swRead1(0) <= switch(0);
+	if rising_edge(ClockBus_sig(25)) then
+		--set elevators to floor
+		if (btn(0) = '1') then --move the elevator0
+			swRead0(3) <= '0';
+			swRead0(2) <= switch(2);
+			swRead0(1) <= switch(1);
+			swRead0(0) <= switch(0);
+		elsif (btn(1) ='1') then --move elevator1
+			swRead1(3) <= '0';
+			swRead1(2) <= switch(2);
+			swRead1(1) <= switch(1);
+			swRead1(0) <= switch(0);
+		end if;
+		
+		--deal with elevator call, neither elevator is on the floor
+		if ( callElevator /= floor_sig0 ) and ( callElevator /= floor_sig1) then
+			--check which is closer
+			if(abs(SIGNED((UNSIGNED(floor_sig0) - UNSIGNED(callElevator))))
+			  <= abs(SIGNED((UNSIGNED(floor_sig1) - UNSIGNED(callElevator)))))then --elevator0 is closer
+				swRead0(3) <= '0';
+				swRead0(2) <= switch(7);
+				swRead0(1) <= switch(6);
+				swRead0(0) <= switch(5);
+			else --the other elevator is closer
+				swRead1(3) <= '0';
+				swRead1(2) <= switch(7);
+				swRead1(1) <= switch(6);
+				swRead1(0) <= switch(5);
+			end if;
 	end if;
+end if;
 end process;
+
+--wire the floor call
+callElevator(3) <= '0';
+callElevator(2) <= switch(7);
+callElevator(1) <= switch(6);
+callElevator(0) <= switch(5);
+
 end Behavioral;
 
