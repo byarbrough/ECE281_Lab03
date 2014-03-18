@@ -138,7 +138,7 @@ begin
 ----------------------------
 --code below tests the LEDs:
 ----------------------------
-LED <= CLOCKBUS_SIG(26 DOWNTO 19);
+--LED <= CLOCKBUS_SIG(26 DOWNTO 19);
 
 --------------------------------------------------------------------------------------------	
 --This code instantiates the Clock Divider. Reference the Clock Divider Module for more info
