@@ -8,8 +8,10 @@
 -- Target Devices: Nexys2 Project Board
 -- Tool versions: 
 -- Description: This file is a shell for implementing designs on a NEXYS 2 board
--- 
---
+-- As is right now (uncommenting sections will alter functionality) the controller allows for an input
+-- of which floor you are on and you call the elevator from. This is done with the leftmost three switches.
+-- The nearest elevator will come to pick up on that floor, LED lights will flash one direction while moving up, and the other direction when moving down
+-- To move a specific elevator, set the rightmost switches, then press button 1 or 0. Button 2 and 3 reset that elevator to floor zero.
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -149,7 +151,7 @@ begin
 ----------------------------
 --code below tests the LEDs:
 ----------------------------
-LED <= CLOCKBUS_SIG(26 DOWNTO 19);
+--LED <= CLOCKBUS_SIG(26 DOWNTO 19);
 
 --------------------------------------------------------------------------------------------	
 --This code instantiates the Clock Divider. Reference the Clock Divider Module for more info
@@ -254,7 +256,7 @@ Selectornator0: FloorSelect
 		onFloor => floor_sig0
 	  );
 	 
---second 7 floor	 
+--second 7 floor elevator
 Selectornator1: FloorSelect
 	PORT MAP(
 		clk => ClockBus_sig(25),
@@ -298,11 +300,34 @@ begin
 				swRead1(1) <= switch(6);
 				swRead1(0) <= switch(5);
 			end if;
+		end if;
 	end if;
-end if;
+			--set LEDs, done based on the clock
+			if floor_sig0 < swRead0 or floor_sig1 < swRead1 then --an elevator is moving up
+				LED <= CLOCKBUS_SIG(26 DOWNTO 19);
+			elsif floor_sig0 > swRead0 or floor_sig1 > swRead1 then--an elevator is moving down, wire clock backwards
+				LED(7) <= CLOCKBUS_SIG(19);
+				LED(6) <= CLOCKBUS_SIG(20);
+				LED(5) <= CLOCKBUS_SIG(21);
+				LED(4) <= CLOCKBUS_SIG(22);
+				LED(3) <= CLOCKBUS_SIG(23);
+				LED(2) <= CLOCKBUS_SIG(24);
+				LED(1) <= CLOCKBUS_SIG(25);
+				LED(0) <= CLOCKBUS_SIG(26);
+			else --all stopped
+				LED(7) <= CLOCKBUS_SIG(25);
+				LED(6) <= CLOCKBUS_SIG(25);
+				LED(5) <= CLOCKBUS_SIG(25);
+				LED(4) <= CLOCKBUS_SIG(25);
+				LED(3) <= CLOCKBUS_SIG(25);
+				LED(2) <= CLOCKBUS_SIG(25);
+				LED(1) <= CLOCKBUS_SIG(25);
+				LED(0) <= CLOCKBUS_SIG(25);
+			end if;			
+	--end if;
 end process;
 
---wire the floor call
+--wire the floor call to the leftmost switches
 callElevator(3) <= '0';
 callElevator(2) <= switch(7);
 callElevator(1) <= switch(6);

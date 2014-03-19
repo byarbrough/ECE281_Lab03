@@ -5,7 +5,9 @@
 -- Create Date:    	10:33:47 07/07/2012 
 -- Design Name:		CE3
 -- Module Name:    	MooreElevatorController - Behavioral 
--- Description: 		Shell for completing CE3
+-- Description: 	Simple controller for sending an elevator up or down 4 floors.
+-- 					Has been modified to only do the prime numbers from 2 to 19
+--						Works off of inputs stop and up_down, displays to SSEG
 --
 ----------------------------------------------------------------------------------
 library IEEE;

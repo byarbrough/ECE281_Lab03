@@ -8,13 +8,14 @@
 -- Project Name: 		CE3
 -- Target Devices: 	Simulation
 -- Tool versions: 
--- Description: 	Mealy Elevator Control
+-- Description: 	Mealy Elevator Control: Simple controller for sending an elevator up or down 4 floors.
+--						Works off of inputs stop and up_down, displays to SSEG
+--						Same result as Moore Controller but also has a next_floor signal
 --
--- Dependencies: 
 --
 -- Revision: 
 -- Revision 0.01 - File Created
--- Additional Comments: C3C Sabin Park gave me the idea to include stop and up_down in the sensitivity list to make it a Mealy machine instead of Moore.
+-- Additional Comments: C3C Jasper Arneberg told me that my output logic needed to involve the inputs to make it a Mealy.
 --
 ----------------------------------------------------------------------------------
 library IEEE;
