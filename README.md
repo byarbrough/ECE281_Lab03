@@ -14,59 +14,107 @@ On one hand, this part was simple because I had a killer Moore machine from CE3.
 ###Part 2: More Floors and Change Inputs
 Strangely enough, I had less trouble with this than the required functionality. This is largely becuase once I had the setup going, the modifcations to the Moore machine were not overly complex. For the prime number floors, it was simply a matter of adding a bunch of extra states and defining their functions. The original Moore shell would have been fine for this, but I was too lazy to copy and paste that many if statemnts. Both of these clock triggerd processes begin the same, but then differ.
 
-_CODE FROM THE SHELL_
-if rising_edge(clk) then
+####CODE FROM THE SHELL
+
+
+	if rising_edge(clk) then
+
 		--reset is active high and will return the elevator to floor1
+		
 		--Question: is reset synchronous or asynchronous? Synchronous.
+		
 		if reset='1' then
+		
 			floor_state <= floor1;
+			
 		--now we will code our next-state logic
+		
 		else
+		
 			case floor_state is
+			
 				--when our current state is floor1
+				
 				when floor1 =>
-					--if up_down is set to "go up" and stop is set to 
+				
+					--if up_down is set to "go up" and stop is set to
+					
 					--"don't stop" which floor do we want to go to?
+					
 					if (up_down='1' and stop='0') then 
+					
 						--floor2 right?? This makes sense!
+						
 						floor_state <= floor2;
+						
 					--otherwise we're going to stay at floor1
+					
 					else
+					
 						floor_state <= floor1;
+						
 					end if;
 
-####As you can see, there is a lot of testing with multiple if statements. This would have been a lot of lines of code to do the prime numbers.
+_As you can see, there is a lot of testing with multiple if statements. This would have been a lot of lines of code to do the prime numbers._
 
-_MY CODE_
-if rising_edge(clk) then
+#####MY CODE
+
+
+	if rising_edge(clk) then
+	
 		--reset is active high and will return the elevator to floor1
-		--Question: is reset synchronous or asynchronous?
+		
 		if reset='1' then
+		
 		--changed to from floor1 to floor2 for prime number problem
+		
 			floor_state <= floor2;
+			
 		elsif (stop='0' and up_down='1') then--moving up
+		
 			case floor_state is
+			
 				when floor2 =>
+				
 					floor_state <= floor3;
+					
 				when floor3 =>
+				
 					floor_state <= floor5;
+					
 				when floor5 =>
+				
 					floor_state <= floor7;
+					
 				when floor7 =>
+				
 					floor_state <= floor11;
+					
 				when floor11 =>
+				
 					floor_state <= floor13;
+					
 				when floor13 =>
+				
 					floor_state <= floor17;
+					
 				when floor17 =>
+				
 					floor_state <= floor19;
+					
 				when floor19 =>
+				
 					floor_state <= floor19;
+					
 				when others =>
+				
 					floor_state <= floor2;
+					
 			end case;
 			
 ####This code does the entirety of the moving up, and a similar chunk does moving down. That's it. Much simpler.
+
+_Please see the Commented Code file for my other code evaluations_
 
 Both cases were sure to include a "when others" option: critical for handling phantom states. Although there isn't really a reason to get phantom states, when they do come up they hold memory if they aren't accounted for and can generally cause problems with the device.
 
@@ -79,4 +127,5 @@ This part was actually a lot of fun. By adding an additional instantiation of th
 
 The lights were slightly frustrating because I couldn't wire the std logic vector in one fell swoop bewtween the clock and the LEDs. I eneded up having to declare each LED individually to an individual clock signal from the bus, but there were only 8, so this wasn't too miserable. I also figured out that this part was asynchrounus because it was running off of any change in the clock, not just he rising edge of the 1.5 Hz signal. But them lights sure are pretty.
 
-*************************
+_Here is a diagram showing how the final controller works_
+![alt text](https://github.com/byarbrough/ECE281_Lab03/blob/master/BoardControls.jpg?raw=true "BoardControls.jpg")
