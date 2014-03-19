@@ -59,6 +59,9 @@ _While the original test for the rising edge was fine, this syntax is easier._
 			floor_state <= floor1;
 		--now we will code our next-state logic
 		else
+###Good Code
+_This could have been made much more efficient by placing the case inside a different if._
+_I did something of the sort with my Mealy, and while it ultimately didn't save much, I think it was better._
 			case floor_state is
 				--when our current state is floor1
 				when floor1 =>
