@@ -129,3 +129,11 @@ The lights were slightly frustrating because I couldn't wire the std logic vecto
 
 _Here is a diagram showing how the final controller works_
 ![alt text](https://github.com/byarbrough/ECE281_Lab03/blob/master/BoardControls.jpg?raw=true "BoardControls.jpg")
+
+************
+
+###Post Functionality
+Despite my initial bliss, it turns out that I did not quite achieve full functionality. While the controller determined which elevator was closest to the desired floor and sent the appropriate elevator, it did not then automatically send the elevator to a requested floor. Each elevator could be sent to a specific floor, but only by selecting that specific elevator to move; it did not move automatically after pickup. While this isn't precisely what the lab described, it is more realistic to an actual elevator system. My design uses a central system to call the elevator, and then lets that elevator rule itself - this is how it works in real life.
+
+###Conclusion
+Ultimately, Lab 03 was a great learning experience in VHDL. In addition to increasing my understanding of state machines, I was able to apply some critical thinking and figure out when is the proper time to use a process or not.
