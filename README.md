@@ -70,4 +70,13 @@ if rising_edge(clk) then
 
 Both cases were sure to include a "when others" option: critical for handling phantom states. Although there isn't really a reason to get phantom states, when they do come up they hold memory if they aren't accounted for and can generally cause problems with the device.
 
-The other major change I had to make was adding an output to this controller. Because it was suppsoed to display a two digit number to the SSEG I decided to output a ten's place digit as well as a one's place digit. This made it easy to use the SSEG because I could just wire another signal. For the 
+The other major change I had to make was adding an output to this controller. Because it was suppsoed to display a two digit number to the SSEG I decided to output a ten's place digit as well as a one's place digit. This made it easy to use the SSEG because I could just wire another signal.
+
+For the floor selector I modified the prime number controller into another different controller. By adding a new input signal, I could tell the controller which floor it was expected on and then logically determine whether to move up or down. After this, it looked just like the primer number shell, but with normal engineering floors from 7 downto 0. (This actually wouldn't be that odd in Ireland; they start on the ground floor and then go up to the first floor. But they take a "lift" not an elevator.)
+
+###Part 3: Multiple Smart Christmas Tree Elevators
+This part was actually a lot of fun. By adding an additional instantiation of the FloorSelect component and a process to the top shell, this was no biggie. First, I determined which elevator was closer to the floor selected on the leftmost switches on the board. Then I set the input signal to the closer elevator, and it moved. Nothing else to it. I had a little speed bump casting SIGNED and UNSIGNED with the abs function, but once I managed to get the program to compile it worked on the first try on the board (I was at CQ when it happened - there was an audible cheer for joy).
+
+The lights were slightly frustrating because I couldn't wire the std logic vector in one fell swoop bewtween the clock and the LEDs. I eneded up having to declare each LED individually to an individual clock signal from the bus, but there were only 8, so this wasn't too miserable. I also figured out that this part was asynchrounus because it was running off of any change in the clock, not just he rising edge of the 1.5 Hz signal. But them lights sure are pretty.
+
+*************************
