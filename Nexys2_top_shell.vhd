@@ -109,6 +109,17 @@ signal ClockBus_sig : STD_LOGIC_VECTOR (26 downto 0);
     );
 	END COMPONENT;
 	
+	COMPONENT MealyElevatorController
+	 PORT( 
+		clk : in  STD_LOGIC;
+		  reset : in  STD_LOGIC;
+		  stop : in  STD_LOGIC;
+		  up_down : in  STD_LOGIC;
+		  floor : out  STD_LOGIC_VECTOR (3 downto 0);
+		  nextfloor : out std_logic_vector (3 downto 0)
+		  );
+		END COMPONENT;
+
 	COMPONENT FloorSelect
 	PORT(
 		clk : in  STD_LOGIC;
@@ -138,7 +149,7 @@ begin
 ----------------------------
 --code below tests the LEDs:
 ----------------------------
---LED <= CLOCKBUS_SIG(26 DOWNTO 19);
+LED <= CLOCKBUS_SIG(26 DOWNTO 19);
 
 --------------------------------------------------------------------------------------------	
 --This code instantiates the Clock Divider. Reference the Clock Divider Module for more info
@@ -206,6 +217,19 @@ nibble3 <= callElevator;
 --Instantiate the design you with to implement below and start wiring it up!:
 -----------------------------------------------------------------------------
 
+------------------------------------ for the Mealy --------------------------
+	MealyControl: MealyElevatorController
+	PORT MAP(
+		 clk => ClockBus_sig(25),
+		 reset => btn(3),
+		 stop => switch(0), 
+		 up_down => switch(1), 
+		 floor => floor_sig0, 
+		 nextfloor => floor_sig1
+    );
+
+------------------------------------------------------------------------------
+
 ----------------- instantiates prime number controller
 -- MoorePrime: MooreElevatorController
 --	 PORT MAP(
@@ -221,68 +245,68 @@ nibble3 <= callElevator;
 ---------------------- instantiates floor finder ------------
 
 -- first 7 floor elevator
-Selectornator0: FloorSelect
-	PORT MAP(
-		clk => ClockBus_sig(25),
-		reset => btn(2),
-		toFloor => swRead0, 
-		curFloor => floor_sig0, 
-		onFloor => floor_sig0
-	  );
-	 
---second 7 floor	 
-Selectornator1: FloorSelect
-	PORT MAP(
-		clk => ClockBus_sig(25),
-		reset => btn(3),
-		toFloor => swRead1, 
-		curFloor => floor_sig1, 
-		onFloor => floor_sig1
-	  );	  
+--Selectornator0: FloorSelect
+--	PORT MAP(
+--		clk => ClockBus_sig(25),
+--		reset => btn(2),
+--		toFloor => swRead0, 
+--		curFloor => floor_sig0, 
+--		onFloor => floor_sig0
+--	  );
+--	 
+----second 7 floor	 
+--Selectornator1: FloorSelect
+--	PORT MAP(
+--		clk => ClockBus_sig(25),
+--		reset => btn(3),
+--		toFloor => swRead1, 
+--		curFloor => floor_sig1, 
+--		onFloor => floor_sig1
+--	  );	  
+--
+----set switches to the signal
+--switch_setter: process(ClockBus_sig(25))
+--	--switch(0), switch(1), switch(2), switch(3), btn(0), btn(1), btn(2), btn(3))
+--begin
+--	--check which floor to activate
+--	if rising_edge(ClockBus_sig(25)) then
+--		--set elevators to floor
+--		if (btn(0) = '1') then --move the elevator0
+--			swRead0(3) <= '0';
+--			swRead0(2) <= switch(2);
+--			swRead0(1) <= switch(1);
+--			swRead0(0) <= switch(0);
+--		elsif (btn(1) ='1') then --move elevator1
+--			swRead1(3) <= '0';
+--			swRead1(2) <= switch(2);
+--			swRead1(1) <= switch(1);
+--			swRead1(0) <= switch(0);
+--		end if;
+--		
+--		--deal with elevator call, neither elevator is on the floor
+--		if ( callElevator /= floor_sig0 ) and ( callElevator /= floor_sig1) then
+--			--check which is closer
+--			if(abs(SIGNED((UNSIGNED(floor_sig0) - UNSIGNED(callElevator))))
+--			  <= abs(SIGNED((UNSIGNED(floor_sig1) - UNSIGNED(callElevator)))))then --elevator0 is closer
+--				swRead0(3) <= '0';
+--				swRead0(2) <= switch(7);
+--				swRead0(1) <= switch(6);
+--				swRead0(0) <= switch(5);
+--			else --the other elevator is closer
+--				swRead1(3) <= '0';
+--				swRead1(2) <= switch(7);
+--				swRead1(1) <= switch(6);
+--				swRead1(0) <= switch(5);
+--			end if;
+--	end if;
+--end if;
+--end process;
 
---set switches to the signal
-switch_setter: process(ClockBus_sig(25))
-	--switch(0), switch(1), switch(2), switch(3), btn(0), btn(1), btn(2), btn(3))
-begin
-	--check which floor to activate
-	if rising_edge(ClockBus_sig(25)) then
-		--set elevators to floor
-		if (btn(0) = '1') then --move the elevator0
-			swRead0(3) <= '0';
-			swRead0(2) <= switch(2);
-			swRead0(1) <= switch(1);
-			swRead0(0) <= switch(0);
-		elsif (btn(1) ='1') then --move elevator1
-			swRead1(3) <= '0';
-			swRead1(2) <= switch(2);
-			swRead1(1) <= switch(1);
-			swRead1(0) <= switch(0);
-		end if;
-		
-		--deal with elevator call, neither elevator is on the floor
-		if ( callElevator /= floor_sig0 ) and ( callElevator /= floor_sig1) then
-			--check which is closer
-			if(abs(SIGNED((UNSIGNED(floor_sig0) - UNSIGNED(callElevator))))
-			  <= abs(SIGNED((UNSIGNED(floor_sig1) - UNSIGNED(callElevator)))))then --elevator0 is closer
-				swRead0(3) <= '0';
-				swRead0(2) <= switch(7);
-				swRead0(1) <= switch(6);
-				swRead0(0) <= switch(5);
-			else --the other elevator is closer
-				swRead1(3) <= '0';
-				swRead1(2) <= switch(7);
-				swRead1(1) <= switch(6);
-				swRead1(0) <= switch(5);
-			end if;
-	end if;
-end if;
-end process;
-
---wire the floor call
-callElevator(3) <= '0';
-callElevator(2) <= switch(7);
-callElevator(1) <= switch(6);
-callElevator(0) <= switch(5);
+----wire the floor call
+--callElevator(3) <= '0';
+--callElevator(2) <= switch(7);
+--callElevator(1) <= switch(6);
+--callElevator(0) <= switch(5);
 
 end Behavioral;
 
