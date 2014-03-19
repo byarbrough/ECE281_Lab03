@@ -1,3 +1,5 @@
+##The Code Below is commented
+
 ----------------------------------------------------------------------------------
 -- Company: USAFA/DFEC
 -- Engineer: Silva & Yarbrough
@@ -5,8 +7,8 @@
 -- Create Date:    	10:33:47 07/07/2012 
 -- Design Name:		CE3
 -- Module Name:    	MooreElevatorController - Behavioral 
--- Description: 		Shell for completing CE3
---
+-- Description: 		Shell for completing CE3, filled in to make a Moore Machine
+--			The controller moves an elevator up and down based on a stop and up_down switch
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -47,10 +49,12 @@ begin
 --This line will set up a process that is sensitive to the clock
 floor_state_machine: process(clk)
 begin
+###Good Code made better.
+_While the original test for the rising edge was fine, this syntax is easier._
 	--clk'event and clk='1' is VHDL-speak for a rising edge
 	if rising_edge(clk) then
 		--reset is active high and will return the elevator to floor1
-		--Question: is reset synchronous or asynchronous?
+		--Question: is reset synchronous or asynchronous? Synchronous.
 		if reset='1' then
 			floor_state <= floor1;
 		--now we will code our next-state logic
@@ -102,7 +106,8 @@ begin
 						--stay
 						floor_state <= floor4;	
 					end if;
-				
+###Good Code
+_Always account for a final else and phantom states to avoid a buildup of memory_
 				--This line accounts for phantom states
 				when others =>
 					floor_state <= floor1;
